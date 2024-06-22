@@ -51,8 +51,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.7
 
-      - name: mkdir root/.config directory
-        run: mkdir -p ~/.config
+      - name: mkdir root/.docker directory
+        run: |
+          mkdir -p ~/.docker
+          touch ~/.docker/config.json
 
       - name: generate a ssh key - USER SHOULD INJECT THEIR OWN AND REBUILD IF THEY USE THIS IMAGE
         run: |
@@ -105,8 +107,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.7
 
-      - name: mkdir root/.config directory
-        run: mkdir -p ~/.config
+      - name: mkdir root/.docker directory
+        run: |
+          mkdir -p ~/.docker
+          touch ~/.docker/config.json
 
       - name: Build Image
         id: build_image
@@ -162,8 +166,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.7
 
-      - name: mkdir root/.config directory
-        run: mkdir -p ~/.config
+      - name: mkdir root/.docker directory
+        run: |
+          mkdir -p ~/.docker
+          touch ~/.docker/config.json
 
       - name: Login to Container Registry
         uses: redhat-actions/podman-login@v1.7
