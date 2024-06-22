@@ -31,7 +31,7 @@ jobs:
         with:
           mode: start
           github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
-          ec2-image-id: ami-0176c4707526fe7d3
+          ec2-image-id: ami-0f2852fede3728360
           ec2-instance-type: m5.2xlarge
           subnet-id: subnet-d1cd7c9c
           security-group-id: sg-052f8b62b8394f363
@@ -64,9 +64,6 @@ jobs:
         id: build_image
         run: make driver-toolkit ARCH=${{ matrix.arch }}
         working-directory: ${{ matrix.context }}
-
-      - name: Login to Container Registry
-        run: podman login -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ env.REGISTRY }}
 
       - name: Push image
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -110,9 +107,6 @@ jobs:
         id: build_image
         run: make bootc DRIVER_VERSION=${{ matrix.driver_version }} ARCH=${{ matrix.arch }}
         working-directory: ${{ matrix.context }}
-
-      - name: Login to Container Registry
-        run: podman login -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ env.REGISTRY }}
 
       - name: Push image
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -159,8 +153,6 @@ jobs:
           mkdir -p ~/.docker
           touch ~/.docker/config.json
 
-      - name: Login to Container Registry
-        run: podman login -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ env.REGISTRY }}
       - name: pull images
         id: pull_image
         working-directory: ${{ matrix.context }}
