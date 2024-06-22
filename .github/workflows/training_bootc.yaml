@@ -51,6 +51,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.7
 
+      - name: mkdir root/.config directory
+        run: mkdir -p ~/.config
+
       - name: generate a ssh key - USER SHOULD INJECT THEIR OWN AND REBUILD IF THEY USE THIS IMAGE
         run: |
           ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
@@ -67,6 +70,7 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
+          auth_file_path: ~/.docker/config.json
 
       - name: Push image
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -101,6 +105,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.7
 
+      - name: mkdir root/.config directory
+        run: mkdir -p ~/.config
+
       - name: Build Image
         id: build_image
         run: make bootc DRIVER_VERSION=${{ matrix.driver_version }} ARCH=${{ matrix.arch }}
@@ -113,6 +120,7 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
+          auth_file_path: ~/.docker/config.json
 
       - name: Push image
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -154,12 +162,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.7
 
+      - name: mkdir root/.config directory
+        run: mkdir -p ~/.config
+
       - name: Login to Container Registry
         uses: redhat-actions/podman-login@v1.7
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
+          auth_file_path: ~/.docker/config.json
 
       - name: pull images
         id: pull_image
