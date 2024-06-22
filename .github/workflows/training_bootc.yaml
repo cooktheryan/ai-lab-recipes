@@ -54,7 +54,6 @@ jobs:
       - name: mkdir root/.docker directory
         run: |
           mkdir -p ~/.docker
-          touch ~/.docker/config.json
 
       - name: generate a ssh key - USER SHOULD INJECT THEIR OWN AND REBUILD IF THEY USE THIS IMAGE
         run: |
@@ -101,7 +100,6 @@ jobs:
       - name: mkdir root/.docker directory
         run: |
           mkdir -p ~/.docker
-          touch ~/.docker/config.json
 
       - name: Build Image
         id: build_image
@@ -151,7 +149,6 @@ jobs:
       - name: mkdir root/.docker directory
         run: |
           mkdir -p ~/.docker
-          touch ~/.docker/config.json
 
       - name: pull images
         id: pull_image
