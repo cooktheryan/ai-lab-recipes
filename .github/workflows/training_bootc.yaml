@@ -55,6 +55,10 @@ jobs:
         run: |
           mkdir -p ~/.docker
 
+      - name: Login to Container Registry
+        run: podman login -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ env.REGISTRY }}
+        
+
       - name: generate a ssh key - USER SHOULD INJECT THEIR OWN AND REBUILD IF THEY USE THIS IMAGE
         run: |
           ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
@@ -100,6 +104,9 @@ jobs:
       - name: mkdir root/.docker directory
         run: |
           mkdir -p ~/.docker
+
+      - name: Login to Container Registry
+        run: podman login -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ env.REGISTRY }}
 
       - name: Build Image
         id: build_image
@@ -149,6 +156,9 @@ jobs:
       - name: mkdir root/.docker directory
         run: |
           mkdir -p ~/.docker
+
+      - name: Login to Container Registry
+        run: podman login -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ env.REGISTRY }}
 
       - name: pull images
         id: pull_image
