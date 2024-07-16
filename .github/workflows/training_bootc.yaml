@@ -7,6 +7,13 @@ on:
       - 'training/**'
       - '.github/workflows/training_bootc.yaml'
 
+  pull_request_target:
+    branches: [ main ]
+    paths:
+      - 'training/**'
+      - '.github/workflows/training_bootc.yaml'
+    types: [ opened, synchronize, labeled, unlabeled, closed ]
+
   workflow_dispatch:
 
 concurrency:
@@ -19,8 +26,34 @@ env:
   REGION: us-east-1
 
 jobs:
+  check-membership:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if user is a member of the organization
+        id: check_membership
+        run: |
+          ORG="your-organization"
+          USER=${{ github.actor }}
+          RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/orgs/containers/members/$USER")
+          if [[ "$RESPONSE" == *"Not Found"* ]]; then
+            echo "is_member=false" >> $GITHUB_ENV
+          else
+            echo "is_member=true" >> $GITHUB_ENV
+          fi
+
+      - name: Run main job if user is a member
+        if: env.is_member == 'true'
+        run: |
+          echo "User is a member of the organization. Running the job..."
+          # Add the steps of your main job here
+
+      - name: Skip job if user is not a member
+        if: env.is_member == 'false'
+        run: echo "User is not a member of the organization. Skipping the job."
+
   start-runner:
     name: Start self-hosted EC2 runner
+    needs: [ check-membership ]
     if: "!contains(github.event.pull_request.labels.*.name, 'hold-tests')"
     runs-on: ubuntu-latest
     outputs:
@@ -59,6 +92,8 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4.1.7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: mkdir root/.docker directory
         run: |
@@ -120,6 +155,8 @@ jobs:
     needs: [ nvidia-bootc-builder-image, start-runner ]
     steps:
       - uses: actions/checkout@v4.1.7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: mkdir root/.docker directory
         run: |
@@ -183,6 +220,8 @@ jobs:
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4.1.7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: mkdir root/.docker directory
         run: |
