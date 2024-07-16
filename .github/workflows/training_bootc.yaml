@@ -29,7 +29,7 @@ jobs:
   check-membership:
     runs-on: ubuntu-latest
     steps:
-    - name: Check if PR author is a member of the organization
+    - name: Check if PR author is a member of operator-framework
       id: org-check
       run: |
         ORG="operator-framework"
@@ -43,6 +43,12 @@ jobs:
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Exit if PR author is not a member
+      if: env.is-member == 'false'
+      run: |
+        echo "PR author is not a member of operator-framework. Exiting..."
+        exit 1
 
   start-runner:
     name: Start self-hosted EC2 runner
