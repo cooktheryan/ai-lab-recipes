@@ -29,14 +29,18 @@ jobs:
   check-membership:
     runs-on: ubuntu-latest
     steps:
-    - name: Check if PR author is a member of the organization
-      id: org-check
-      uses: check-org-membership@v1
-      with:
-        organization: operator-framework
-        username: ${{ github.event.pull_request.user.login }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check if organization member
+        id: is_organization_member
+        if: github.event.action == 'opened'
+        uses: JamesSingleton/is-organization-member@1.0.0
+        with:
+          organization: operator-framework
+          username: ${{ github.event.issue.user.login }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Comment
+        if: |
+          ${{ steps.is_organization_member.outputs.result == 'false' }}
+        run: echo User Does Not Belong to testorg
 
   start-runner:
     name: Start self-hosted EC2 runner
