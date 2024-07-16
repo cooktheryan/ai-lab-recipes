@@ -34,7 +34,7 @@ jobs:
         run: |
           ORG="your-organization"
           USER=${{ github.actor }}
-          RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/orgs/containers/members/$USER")
+          RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/orgs/operator-framework/members/$USER")
           if [[ "$RESPONSE" == *"Not Found"* ]]; then
             echo "is_member=false" >> $GITHUB_ENV
           else
