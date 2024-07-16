@@ -33,7 +33,7 @@ jobs:
       id: org-check
       uses: check-org-membership@v1
       with:
-        organization: your-organization
+        organization: operator-framework
         username: ${{ github.event.pull_request.user.login }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
