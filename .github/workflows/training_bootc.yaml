@@ -32,7 +32,7 @@ jobs:
     - name: Check if PR author is a member of operator-framework
       id: org-check
       run: |
-        ORG="operator-framework"
+        ORG="containers"
         USERNAME="${{ github.event.pull_request.user.login }}"
         RESPONSE=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           "https://api.github.com/orgs/$ORG/members/$USERNAME" -o /dev/null -w '%{http_code}')
