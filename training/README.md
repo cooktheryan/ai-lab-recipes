@@ -1,7 +1,6 @@
 Linux Operating System Bootable containers enabled for AI Training
 ===
-##TRIGGER PR
-
+dfgsdfgsdf
 In order to run accelerated AI workloads, we've prepared [bootc](https://github.com/containers/bootc) container images for the major AI platforms.
 
 # Makefile targets
